@@ -4,20 +4,26 @@ import {Product} from "../Models/Product";
 import {AppController} from "./app.controller";
 import {AppService} from "./app.service";
 import { ProductsModule } from "./products/products.module";
+import { ClientModule } from './client/client.module';
+import { Client } from "../Models/Client";
 
 @Module({
     imports: [
         TypeOrmModule.forRoot({
             type: 'postgres',
-            host: 'localhost',
+            host: 'dpg-cdr2k8ta4991vasbae90-a.frankfurt-postgres.render.com',
             port: 5432,
-            username: 'Skillou',
-            password: 'rayanedu67',
-            database: 'db_tp_skillou',
-            entities: [Product],
-            synchronize: true,
+            username: 'cnam_d2ol_user',
+            password: 'ED8pWZBuwIWfwsrg8dArpBNzuX3eSgRZ',
+            database: 'db_skillou',
+            entities: [Product, Client],
+            synchronize: false, // mettre true si ça bug plus
+            extra: {
+                ssl: true
+            }
         }),
-        ProductsModule
+        ProductsModule,
+        ClientModule
     ],
     controllers: [AppController],
     providers: [AppService],
