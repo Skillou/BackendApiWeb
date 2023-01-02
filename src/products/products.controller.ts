@@ -18,7 +18,7 @@ export class ProductsController {
 
     @Post()
     async create(@Body() product: Product): Promise<Product> {
-        return await this.productsService.create(product);
+        return this.productsService.create(product);
     }
 
     @Put(':id')

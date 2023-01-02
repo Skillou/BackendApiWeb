@@ -17,7 +17,7 @@ import { Client } from "../Models/Client";
             password: 'ED8pWZBuwIWfwsrg8dArpBNzuX3eSgRZ',
             database: 'db_skillou',
             entities: [Product, Client],
-            synchronize: false, // mettre true si ça bug plus
+            synchronize: true, // mettre true si ça bug plus
             extra: {
                 ssl: true
             }

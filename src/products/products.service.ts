@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {Product} from "../../Models/Product";
+import { Product } from "../../Models/Product";
+
 
 @Injectable()
 export class ProductsService {
     constructor(
-        @InjectRepository(Product)
-        private readonly productRepository: Repository<Product>,
+      @InjectRepository(Product)
+      private readonly productRepository: Repository<Product>,
     ) {}
 
     async findAll(): Promise<Product[]> {
@@ -19,10 +20,26 @@ export class ProductsService {
     }
 
     async create(product: Product): Promise<Product> {
-        return await this.productRepository.save(product);
+        // Check if the value already exists in the table
+        const existingProduct = await this.productRepository.findOne({
+            where: { name: product.name },
+        });
+        if (existingProduct) {
+            throw new Error('Product name already exists');
+        }
+        // Insert the row if the value does not exist
+        return this.productRepository.save(product);
     }
 
     async update(id: string, product: Product): Promise<void> {
+        // Check if the value already exists in the table
+        const existingProduct = await this.productRepository.findOne({
+            where: { name: product.name },
+        });
+        if (existingProduct && existingProduct.id !== Number(id)) {
+            throw new Error('Product name already exists');
+        }
+        // Update the row if the value does not exist or belongs to the same product
         await this.productRepository.update(id, product);
     }
 
