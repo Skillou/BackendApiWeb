@@ -34,4 +34,7 @@ export class Client {
 
   @Column()
   public password: string;
+
+  @Column({ default: false })
+  public isAdmin: boolean;
 }
