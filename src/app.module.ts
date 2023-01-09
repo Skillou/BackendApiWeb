@@ -7,9 +7,11 @@ import { ProductsModule } from "./products/products.module";
 import { ClientModule } from "./client/client.module";
 import { Client } from "../Models/Client";
 import { AuthModule } from "./auth/auth.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: "postgres",
       host: "dpg-cdr2k8ta4991vasbae90-a.frankfurt-postgres.render.com",

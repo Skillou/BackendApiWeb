@@ -6,19 +6,19 @@ export class Client {
   public id: number;
 
   @Column()
-  public civility: string;
+  public civility: 'male' | 'female' | 'other';
 
-  @Column()
-  public first_name: string;
+  @Column({name: "first_name"})
+  public firstName: string;
 
-  @Column()
-  public last_name: string;
+  @Column({name: "last_name"})
+  public lastName: string;
 
   @Column()
   public email: string;
 
   @Column()
-  public telphone: number;
+  public telephone: string;
 
   @Column()
   public street: string;
@@ -26,10 +26,10 @@ export class Client {
   @Column()
   public city: string;
 
-  @Column()
-  public zip_code: number;
+  @Column({ name: "zip_code" })
+  public zipCode: string;
 
-  @Column()
+  @Column({ unique: true })
   public login: string;
 
   @Column()
@@ -38,3 +38,7 @@ export class Client {
   @Column({ default: false })
   public isAdmin: boolean;
 }
+
+export type SafeClient = Omit<Client, 'password'>;
+
+export type LoginClient = Pick<Client, 'login' | 'password'>;

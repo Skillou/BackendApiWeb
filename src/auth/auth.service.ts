@@ -1,21 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Client } from "../../Models/Client";
+import { Client, LoginClient, SafeClient } from "../../Models/Client";
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ClientService } from 'src/client/client.service';
+import { compare, hash } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(@InjectRepository(Client) private readonly clientRepository: Repository<Client>) {}
 
-  async createToken(user: Client) {
-    const payload = { email: user.email, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async signup({ password: createPassword, ...createSafeClient }: Client): Promise<SafeClient> {
+    const createClient = {...createSafeClient, password: await hash(createPassword, 10)}
+    const { password, ...safeClient } = await this.clientRepository.save(createClient);
+    return safeClient;
+  }
+  
+  async login({ login, password }: LoginClient): Promise<SafeClient> {
+    const { password: clientPassword, ...safeClient } = await this.clientRepository.findOneBy({ login });
+    if (!safeClient) throw new NotFoundException();
+    if (await compare(password, clientPassword)) {
+      return safeClient;
+    }
+    throw new UnauthorizedException();
   }
 
-  async validateUser(payload: any): Promise<any> {
+  // createToken({ login, isAdmin }: Client): { access_token: string } {
+  //   return {
+  //     access_token: 'coucou'// this.jwtService.sign({ login, isAdmin }),
+  //   };
+  // }
+
+  // async validateUser(payload: any): Promise<any> {
     // Put some validation logic here
     // for example query user by id/email from database
     // and check if the user with this id/email exists
-  }
+  // }
 }
