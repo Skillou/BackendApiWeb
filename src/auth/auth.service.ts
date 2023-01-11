@@ -1,9 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Client, LoginClient, SafeClient } from "../../Models/Client";
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ClientService } from 'src/client/client.service';
 import { compare, hash } from 'bcrypt';
 
 @Injectable()
