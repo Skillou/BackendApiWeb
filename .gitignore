@@ -36,3 +36,9 @@ lerna-debug.log*
 
 # Env
 .env
+
+# README
+README.md
+
+# Package
+package-lock.json
